@@ -64,7 +64,7 @@ function parseSchema(
 export class SwaggerResolver implements Resolver {
   constructor() {}
 
-  renderArgs(info: OpenAPIOperation, components: OpenAPIComponent): ASTNode[] {
+  renderArgs(info: OpenAPIOperation, components?: OpenAPIComponent): ASTNode[] {
     const args: ASTNode[] = [];
     const { parameters, requestBody: body } = info;
 
@@ -81,7 +81,7 @@ export class SwaggerResolver implements Resolver {
     return args;
   }
 
-  renderRsp(info: OpenAPIOperation, components: OpenAPIComponent): ASTNode[] {
+  renderRsp(info: OpenAPIOperation, components?: OpenAPIComponent): ASTNode[] {
     const rsps: ASTNode[] = [];
     if (info.responses) {
       Object.keys(info.responses).forEach((code) => {
@@ -107,8 +107,8 @@ export class SwaggerResolver implements Resolver {
           longname: `${path}.${method}`,
           desc: methodInfo.summary || "",
           type: "Function",
-          args: this.renderArgs(methodInfo, swaggerJson.components?.schemas!),
-          rsp: this.renderRsp(methodInfo, swaggerJson.components?.schemas!),
+          args: this.renderArgs(methodInfo, swaggerJson.components?.schemas),
+          rsp: this.renderRsp(methodInfo, swaggerJson.components?.schemas),
         });
       });
     });

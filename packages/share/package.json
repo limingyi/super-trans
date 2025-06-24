@@ -6,12 +6,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm",
-    "dev": "tsup src/index.ts --watch --format cjs,esm --outDir dist"
+    "dev": "tsup src/index.ts --watch --format cjs,esm --outDir dist",
+    "lint": "eslint ./src/"
   },
   "dependencies": {
     "@super-trans/core": "workspace:*"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0"
   }
 }

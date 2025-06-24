@@ -1,8 +1,6 @@
 /** 解析描述 */
 interface ParseStrategy {
-  parse(
-    desc: string
-  ): { title: string; enums: { label: string; value: string }[] } | undefined;
+  parse(desc: string): { title: string; enums: EnumItem[] } | undefined;
 }
 
 /** 正则匹配模式 */
@@ -55,7 +53,7 @@ class ParseByPattern implements ParseStrategy {
       if (!match) continue;
 
       const [, title, props] = match;
-      const enums: any[] = [];
+      const enums: EnumItem[] = [];
       props.split(rule.iFlag).map((item) => {
         const [value, label] = item.trim().split(rule.vFlag);
         if (value && label) {
@@ -67,10 +65,12 @@ class ParseByPattern implements ParseStrategy {
   }
 }
 
-export type Enums = {
+export type EnumItem = {
   label: string;
   value: any;
-}[];
+};
+
+export type Enums = EnumItem[];
 
 /** 描述解析 */
 export function renderDesc(desc?: string): {

@@ -17,6 +17,11 @@
         "^build"
       ],
       "outputs": []
+    },
+    "lint": {
+      "dependsOn": [
+        "^lint"
+      ]
     }
   }
 }

@@ -1,7 +1,7 @@
 import { ASTNode } from "@super-trans/core";
 
 // 遍历方法，当返回break 时中断遍历
-export type travelFun = (node: ASTNode) => "break" | any;
+export type travelFun = (node: ASTNode) => "break" | void;
 
 // 深度优先遍历节点
 export function dfsTravel(node: ASTNode, callback: travelFun) {
