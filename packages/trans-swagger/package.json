@@ -1,0 +1,18 @@
+{
+  "name": "@super-trans/trans-swagger",
+  "version": "0.1.0",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "dev": "tsup src/index.ts --watch --format cjs,esm --outDir dist"
+  },
+  "dependencies": {
+    "@super-trans/core": "workspace:*",
+    "@super-trans/share": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
+  }
+}

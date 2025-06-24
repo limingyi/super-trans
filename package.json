@@ -1,0 +1,21 @@
+{
+  "name": "super-trans",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "changeset": "changeset"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "tsup": "^6.7.0",
+    "turbo": "^1.10.3",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@super-trans/cli",
+  "version": "1.0.0",
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "bin": {
+    "super-trans": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts --format cjs --dts",
+    "dev": "tsup src/cli.ts --watch --format cjs --outDir dist"
+  },
+  "dependencies": {
+    "@super-trans/core": "workspace:*",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "tsup": "^8.0.1"
+  }
+}
