@@ -79,7 +79,7 @@ pnpm dev
 | fix     | 修复缺陷                 | fix(cli): 修复配置文件解析错误 |
 | docs    | 文档更新                 | docs(readme): 补充Git提交规范 |
 | style   | 代码风格调整（不影响功能）| style(share): 统一缩进格式    |
-| refactor| 代码重构（非功能/缺陷）  | refactor(ts2md): 优化Markdown模板生成逻辑 |
+| refactor|fi 代码重构（非功能/缺陷）  | refactor(ts2md): 优化Markdown模板生成逻辑 |
 | test    | 测试用例修改             | test(swagger): 新增枚举类型测试 |
 | chore   | 构建/工具链调整          | chore(ci): 优化turbo构建缓存策略 |
 

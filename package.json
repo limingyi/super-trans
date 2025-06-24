@@ -12,7 +12,6 @@
     "changeset:version": "changeset version",
     "release": "changeset publish"
   },
-  "private": true,
   "workspaces": [
     "packages/*"
   ],
