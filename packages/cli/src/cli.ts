@@ -7,7 +7,6 @@ const program = new Command();
 program
   .name("super-trans")
   .description("符合新规则的万能转换工具，支持多转换器扩展")
-  .version("2.0.0")
   .option("-c, --config <path>", "配置文件路径", "trans.config.json")
   .action(async (options) => {
     try {

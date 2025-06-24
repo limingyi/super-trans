@@ -1,6 +1,6 @@
 # @super-trans/cli
 
-## 2.0.0
+## 1.0.0
 
 ### Major Changes
 
