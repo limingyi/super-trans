@@ -1,4 +1,4 @@
-import { Releaser } from "@super-trans/core";
+import { FinalPayload, ReleasePayload, Releaser } from "@super-trans/core";
 
 export class SwaggerReleaser implements Releaser {
   temp: any[];
@@ -6,11 +6,14 @@ export class SwaggerReleaser implements Releaser {
     this.temp = [];
   }
 
-  async collect(result: any) {
-    this.temp.push(result);
+  async collect(payload: ReleasePayload) {
+    this.temp.push(payload.result);
   }
 
-  async generate() {
-    return this.temp;
+  async generate(payload: FinalPayload) {
+    return {
+      ...payload,
+      results: JSON.stringify(this.temp, null, 2),
+    };
   }
 }

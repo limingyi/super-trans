@@ -8,8 +8,8 @@ export type OutputConfig = {
 
 export type TransformerConfig = {
   output: OutputConfig; // 输出目录（必填）
-  plugins: Plugin[]; // 可选，插件扩展列表
-  helper: OutputHepler;
+  plugins?: Plugin[]; // 可选，插件扩展列表
+  helper?: OutputHepler;
 };
 
 export type CliConfig = {

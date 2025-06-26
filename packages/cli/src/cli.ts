@@ -27,16 +27,19 @@ program
           const helper = new OutputHepler(output, config);
           transConfig.helper = helper;
           const processer = new ProcessClz(transConfig) as Processer;
-          const result = await processer.run(JSON.parse(content));
 
           // 结果缓存目标
-          await helper.addFileToDist(
-            "result.js",
-            JSON.stringify(result, null, 2)
-          );
+          processer.hooks.generate.tapPromise("final", async (payload) => {
+            const { results, config } = payload;
+            processer.helper.addFileToDist(
+              config?.output?.filename || "result.js",
+              results
+            );
+          });
 
+          // 运行
+          const result = await processer.run(JSON.parse(content));
           processer.hooks.done.call(result);
-
           console.log(
             `[${trans}] 处理文件 ${filePath} 完成，输出至：${output.dist}`
           );

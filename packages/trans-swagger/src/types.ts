@@ -110,3 +110,8 @@ export type OpenAPIDocument = {
     schemas?: OpenAPIComponent;
   };
 };
+
+export type TansResult = {
+  formSchema: FormSchema[];
+  tableColumns: TableColumn[];
+};

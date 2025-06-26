@@ -6,6 +6,11 @@
   "bin": {
     "super-trans": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "lint": "eslint ./src/",
     "build": "tsup src/cli.ts --format cjs --dts",

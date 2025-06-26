@@ -1,19 +1,17 @@
-import { Transformer, ASTTree, ASTTypes } from "@super-trans/core";
+import { Transformer, ASTTypes, ReleasePayload } from "@super-trans/core";
 import { dfsTravel } from "@super-trans/share";
 import { FormSchema, TableColumn } from "./types";
 
 export class SwaggerTransformer implements Transformer {
   constructor() {}
 
-  parse(ast: ASTTree): {
-    formSchema: FormSchema[];
-    tableColumns: TableColumn[];
-  } {
+  parse(payload: ReleasePayload): ReleasePayload {
+    const { ast, ...extra } = payload;
     const formSchema: FormSchema[] = [];
     const tableColumns: TableColumn[] = [];
 
     // 转换输入参数到表单配置
-    ast.args?.forEach((arg) => {
+    ast?.args?.forEach((arg) => {
       dfsTravel(arg, (node) => {
         if (node.type === ASTTypes.object || node.type === ASTTypes.array)
           return;
@@ -28,7 +26,7 @@ export class SwaggerTransformer implements Transformer {
     });
 
     // 转换返回值到表格列配置
-    ast.rsp?.forEach((rsp) => {
+    ast?.rsp?.forEach((rsp) => {
       dfsTravel(rsp, (node) => {
         if (node.type === ASTTypes.object || node.type === ASTTypes.array)
           return;
@@ -39,7 +37,8 @@ export class SwaggerTransformer implements Transformer {
       });
     });
 
-    return { formSchema, tableColumns };
+    extra.result = { formSchema, tableColumns };
+    return extra;
   }
 
   private getComponentByType(type: ASTTypes): FormSchema["component"] {

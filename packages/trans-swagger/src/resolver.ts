@@ -1,4 +1,10 @@
-import { ASTTree, ASTNode, ASTTypes, Resolver } from "@super-trans/core";
+import {
+  ASTTree,
+  ASTNode,
+  ASTTypes,
+  Resolver,
+  ResolvePayload,
+} from "@super-trans/core";
 import {
   OpenAPIDocument,
   OpenAPIOperation,
@@ -95,7 +101,12 @@ export class SwaggerResolver implements Resolver {
     return rsps;
   }
 
-  resolve(swaggerJson: OpenAPIDocument): ASTTree[] {
+  resolve(payload: ResolvePayload): ResolvePayload {
+    const { content, ...extra } = payload;
+    const swaggerJson = (
+      typeof content === "string" ? JSON.parse(content) : content
+    ) as OpenAPIDocument;
+
     const trees: ASTTree[] = [];
 
     Object.keys(swaggerJson.paths).forEach((path) => {
@@ -113,6 +124,7 @@ export class SwaggerResolver implements Resolver {
       });
     });
 
-    return trees;
+    extra.asts = trees;
+    return extra;
   }
 }
