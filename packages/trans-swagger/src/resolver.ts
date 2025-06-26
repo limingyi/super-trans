@@ -95,7 +95,7 @@ export class SwaggerResolver implements Resolver {
     return rsps;
   }
 
-  async resolve(swaggerJson: OpenAPIDocument): Promise<ASTTree[]> {
+  resolve(swaggerJson: OpenAPIDocument): ASTTree[] {
     const trees: ASTTree[] = [];
 
     Object.keys(swaggerJson.paths).forEach((path) => {

@@ -4,6 +4,11 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "lint": "eslint ./src/",
     "build": "tsup src/index.ts --dts --format cjs,esm",

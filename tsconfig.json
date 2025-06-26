@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "es5",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
+    "lib": ["es5", "ES6", "ESNext", "dom"],
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {

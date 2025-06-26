@@ -1,0 +1,96 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User Management API",
+    "description": "示例用户管理系统 OpenAPI 文档",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "创建新用户",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功的用户",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": [
+          "username",
+          "email"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "example": 123
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20,
+            "example": "john_doe"
+          },
+          "sex": {
+            "type": "string",
+            "description": "性别 1-男 2-女"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "createTime": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "example": {
+          "id": 100,
+          "username": "test_user",
+          "email": "user@example.com",
+          "createTime": "2023-01-01T12:00:00Z"
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

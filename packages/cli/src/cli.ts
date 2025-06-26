@@ -1,33 +1,46 @@
-import { Command } from "commander";
-import { readFile } from "fs/promises";
-import { CliConfig } from "./types";
-
-const program = new Command();
+import { program } from "commander";
+import { readFileSync } from "fs";
+import path from "path";
+import { CliConfig, Processer } from "./types";
+import { loadSourceFiles } from "./source";
+import { OutputHepler } from "./helper";
 
 program
-  .name("super-trans")
   .description("符合新规则的万能转换工具，支持多转换器扩展")
-  .option("-c, --config <path>", "配置文件路径", "trans.config.json")
+  .option("-c, --config <path>", "配置文件路径", "./trans.config.json")
   .action(async (options) => {
     try {
+      const configPath = path.resolve(options.config);
+
       // 1. 读取并解析配置
-      const configContent = await readFile(options.config, "utf-8");
+      const configContent = readFileSync(configPath, "utf-8");
       const config = JSON.parse(configContent) as CliConfig;
 
-      // 2. 初始化各转换器（支持多转换器任务）
-      for (const [trans, transConfig] of Object.entries(config.transformers)) {
-        // 动态加载转换器插件
-        // TODO 这里如何加载插件
-        const { default: processorFun } = await import(trans);
-        const processer = processorFun(transConfig);
+      // 加载源文件
+      const sourceFiles = await loadSourceFiles(config);
+      // 处理每个文件
+      for (const { path: filePath, content } of sourceFiles) {
+        // 初始化各转换器
+        for (const [trans, tConfig] of Object.entries(config.transformers)) {
+          const { output, ...transConfig } = tConfig;
+          const { default: ProcessClz } = await import(trans);
+          const helper = new OutputHepler(output, config);
+          transConfig.helper = helper;
+          const processer = new ProcessClz(transConfig) as Processer;
+          const result = await processer.run(JSON.parse(content));
 
-        // TODO 这里如何执行插件
-        await processer.run({
-          source: config.source,
-          output: transConfig.output,
-        });
+          // 结果缓存目标
+          await helper.addFileToDist(
+            "result.js",
+            JSON.stringify(result, null, 2)
+          );
 
-        console.log(`[${trans}] 转换成功，输出至：${transConfig.output}`);
+          processer.hooks.done.call(result);
+
+          console.log(
+            `[${trans}] 处理文件 ${filePath} 完成，输出至：${output.dist}`
+          );
+        }
       }
     } catch (error) {
       console.error("全局转换失败：", error);
@@ -35,4 +48,4 @@ program
     }
   });
 
-program.parse();
+program.parse(process.argv);

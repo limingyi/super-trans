@@ -1,0 +1,13 @@
+{
+  "context": ".",
+  "source": {
+    "include": "./src/file/example.json"
+  },
+  "transformers": {
+    "@super-trans/trans-swagger": {
+      "output": {
+        "dist": "dist/swagger"
+      }
+    }
+  }
+}

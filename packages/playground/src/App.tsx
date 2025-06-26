@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import transSwagger  from '@super-trans/trans-swagger';
+import SwaggerProcesser from '@super-trans/trans-swagger';
+
+const transSwagger = new SwaggerProcesser();
 
 interface PlaygroundState {
   input: string;
@@ -15,7 +17,7 @@ const App: React.FC = () => {
   });
   const handleConvert = async () => {
     try {
-      const result = await transSwagger(JSON.parse(state.input))
+      const result = await transSwagger.run(JSON.parse(state.input))
       setState(prev => ({ ...prev, output: JSON.stringify(result, null, 2) }));
     } catch (e) {
       setState(prev => ({ ...prev, output: `转换失败: ${(e as Error).message}` }));

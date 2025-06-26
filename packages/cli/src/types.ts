@@ -1,6 +1,15 @@
+import { Plugin } from "@super-trans/core";
+import { OutputHepler } from "./helper";
+export { Processer } from "@super-trans/core";
+
+export type OutputConfig = {
+  dist: string;
+};
+
 export type TransformerConfig = {
-  output: string; // 输出目录（必填）
-  plugins: any[]; // 可选，插件扩展列表
+  output: OutputConfig; // 输出目录（必填）
+  plugins: Plugin[]; // 可选，插件扩展列表
+  helper: OutputHepler;
 };
 
 export type CliConfig = {

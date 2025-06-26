@@ -134,10 +134,10 @@ type ASTNode = {
 
   ```json
   {
-    "context": "string", // 基础路径（用于解析相对路径）
+    "context": "string", // 基础路径（用于解析相对路径）默认 './'
     "source": {
-      "include": "string[]", // 必填，源码扫描路径（如 `["src/​**​/*.ts"]`）
-      "exclude": "string[]" // 可选，排除路径（如 `["​**​/test/*"]`）
+      "include": "string|string[]", // 必填，源码扫描路径（如 `["src/​**​/*.ts"]`）
+      "exclude": "string|string[]" // 可选，排除路径（如 `["​**​/test/*"]`）
     },
     "transformers": {
       // 转换器插件配置
