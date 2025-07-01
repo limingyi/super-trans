@@ -1,7 +1,7 @@
 {
   "context": ".",
   "source": {
-    "include": "./src/file/example.json"
+    "include": "./src/file/*.json"
   },
   "transformers": {
     "@super-trans/trans-swagger": {

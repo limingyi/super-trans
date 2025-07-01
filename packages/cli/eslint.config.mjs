@@ -1,10 +1,9 @@
 import { baseEslintConfig } from '../../eslint.config.base.mjs';
-import { defineConfig } from "eslint/config";
-
-export default defineConfig([
+export default [
   ...baseEslintConfig,
   {
     rules: {
+      ...baseEslintConfig.rules,
       'no-irregular-whitespace': [
         'error',
         {
@@ -15,4 +14,4 @@ export default defineConfig([
       ]
     }
   }
-]);
+];

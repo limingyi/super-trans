@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { glob } from "fast-glob";
 import { CliConfig } from "./types";
+import path from "path";
 
 /**
  * 加载并匹配源文件
@@ -29,6 +30,7 @@ export async function loadSourceFiles(config: CliConfig) {
   // 读取文件内容并返回对象数组
   return matchedFiles.map((filePath) => ({
     path: filePath,
+    ...path.parse(filePath),
     content: readFileSync(filePath, "utf-8"),
   }));
 }

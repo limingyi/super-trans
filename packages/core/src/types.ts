@@ -1,3 +1,5 @@
+export type AnyObject = { [index: string]: any };
+
 export enum ASTTypes {
   "string" = "string",
   "number" = "number",

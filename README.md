@@ -24,19 +24,15 @@
 #### 1. 简介
 `changeset` 是用于 Monorepo 多包管理的版本控制工具，支持自动生成版本号、更新依赖关系、生成 CHANGELOG 并发布到 npm，确保多包版本的一致性和可追溯性。
 
-#### 2. 配置步骤
-- **安装依赖**：根目录执行 `pnpm add -D @changesets/cli`
-- **初始化配置**：执行 `pnpm changeset init` 生成 `.changeset` 目录和 `config.json`
-- **配置调整**（可选）：修改 `.changeset/config.json` 自定义发布策略（如关联包版本、忽略包等）
 
-#### 3. 常用命令
+#### 2. 常用命令
 | 命令                      | 说明                                      |
 |---------------------------|-------------------------------------------|
 | `pnpm changeset add`       | 添加版本变更说明（选择受影响包并描述变更）|
 | `pnpm changeset version`   | 根据变更生成版本号（更新 package.json）   |
 | `pnpm changeset publish`   | 发布更新到 npm（需登录 npm 账号）         |
 
-#### 4. 工作流程
+#### 3. 工作流程
 1. 开发完成后执行 `pnpm changeset add`，选择影响的包并填写变更类型（patch/minor/major）
 2. 合并到主分支后执行 `pnpm changeset version`，自动更新版本号和依赖
 3. 执行 `pnpm changeset publish` 发布到 npm 仓库

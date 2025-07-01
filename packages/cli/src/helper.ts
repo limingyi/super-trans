@@ -7,11 +7,9 @@ function toAbsPath(filePath: string, context: string) {
 }
 
 export class OutputHepler {
-  config: OutputConfig;
   dist: string;
 
   constructor(config: OutputConfig, cliConfig: CliConfig) {
-    this.config = config;
     const baseurl = cliConfig.context || process.cwd();
     this.dist = toAbsPath(config.dist || ".", baseurl);
   }

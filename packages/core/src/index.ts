@@ -1,4 +1,4 @@
-import { ASTTree } from "./types";
+import { AnyObject, ASTTree } from "./types";
 import {
   AsyncParallelHook,
   AsyncSeriesWaterfallHook,
@@ -7,7 +7,7 @@ import {
 } from "tapable";
 
 export type ResolvePayload = {
-  config?: { [index: string]: any };
+  config?: any;
   content?: any; // 内容
   asts?: ASTTree[];
 };
@@ -18,7 +18,7 @@ export abstract class Resolver {
 }
 
 export type ReleasePayload = {
-  config?: { [index: string]: any };
+  config?: any;
   result?: any; // 内容
   ast?: ASTTree;
 };
@@ -29,11 +29,12 @@ export abstract class Transformer {
 }
 
 export type FinalPayload = {
-  config?: { [index: string]: any };
+  config?: any;
   results?: string; // 最终内容
 };
 // 输出层：发布器抽象类
 export abstract class Releaser {
+  abstract clear(): Promise<void>;
   abstract collect(payload: ReleasePayload): Promise<void>;
   abstract generate(payLoad: FinalPayload): Promise<FinalPayload>;
 }
@@ -42,10 +43,9 @@ export abstract class Plugin {
   abstract apply(_processer: Processer): void;
 }
 
-export type ProcessConfig = {
-  helper?: any;
+export type ProcessConfig<C = AnyObject, H = any> = C & {
   plugins?: Plugin[];
-  [index: string]: any;
+  helper?: H;
 };
 
 export type ProcessOptions = {
@@ -64,8 +64,7 @@ export class Processer {
     resolve: SyncWaterfallHook<ResolvePayload>; // 将配置的内容转为 ASTTree，可能会出现多个 ASTTree，同步串行，前一个回调的返回值作为下一个回调的输入
     transform: SyncWaterfallHook<ReleasePayload>; // 将单个 ASTTress 转化为想要的内容，同步串行，前一个回调的返回值作为下一个回调的输入
     collect: AsyncParallelHook<ReleasePayload>; // 处理单个树转换后的信息，异步并行，同时执行所有回调
-    generate: AsyncParallelHook<FinalPayload>; // 所有树处理完后触发，异步并行，同时执行所有回调
-    // 两种 generate ，一种返回值，一种并行处理不管返回值
+    generate: AsyncSeriesWaterfallHook<FinalPayload>; // 所有树处理完后触发，异步串行，前一个的返回做为下一个的输入
     fail: SyncHook<Error>; // 报错
     done: SyncHook<any>; // 整个流程结束后触发，在cli 模式中生效
   };
@@ -83,13 +82,13 @@ export class Processer {
       resolve: new SyncWaterfallHook(["data"]),
       transform: new SyncWaterfallHook(["ast"]),
       collect: new AsyncParallelHook(["result"]),
-      generate: new AsyncParallelHook(["final"]),
+      generate: new AsyncSeriesWaterfallHook(["final"]),
       done: new SyncHook(["finish"]),
       fail: new SyncHook(["error"]),
     };
 
     const { config, resolver, transformer, releaser } = _opts;
-    const { helper, plugins, ...rest } = config || {};
+    const { plugins, helper, ...rest } = config || {};
 
     this.resolver = resolver;
     this.transformer = transformer;
@@ -98,38 +97,38 @@ export class Processer {
     // 实例化插件
     if (plugins) {
       plugins.forEach((plugin) => {
-        plugin.apply(this);
+        return plugin.apply(this);
       });
     }
 
-    // 其他
-    this.helper = helper;
+    // 配置
     this.config = rest;
+    this.helper = helper;
+  }
+
+  async runByContent(content: any) {
+    return await this.run({
+      config: this.config,
+      content,
+    });
   }
 
   // 执行完整流程（支持配置驱动）
-  async run(content: any) {
+  async run(payload: ResolvePayload) {
     try {
-      const payload: ResolvePayload = {
-        config: this.config,
-        content,
-      };
-      // 准备阶段
-      const prepare = await this.hooks.prepare.promise(payload);
-
       // 输入转换
-      const defPrepare = this.resolver?.resolve(prepare);
-      const resolve = this.hooks.resolve.call(defPrepare || prepare);
+      const defPayload = this.resolver?.resolve(payload);
+      const resolve = this.hooks.resolve.call(defPayload || payload);
       const { asts: astList, config } = resolve;
 
       if (!astList || !astList.length) {
-        throw new Error("Resolve ASTTree is empty");
+        throw new Error("Resolve ASTTrees is empty");
       }
 
-      // 主转换，并行处理
+      // 主转换，并行处理，报错弹出
       await Promise.all(
         astList.map(async (ast: ASTTree): Promise<void> => {
-          const payload: ReleasePayload = { config, ast };
+          const payload: ReleasePayload = { ast, config };
           const defPayload = this.transformer?.parse(payload);
           const result = this.hooks.transform.call(defPayload || payload);
 
@@ -140,10 +139,10 @@ export class Processer {
       );
 
       // 输出阶段
-      const finalPayload: ReleasePayload = { config };
+      const finalPayload: FinalPayload = { config };
       const final = await this.releaser?.generate(finalPayload);
-      await this.hooks.generate.promise(final || finalPayload);
-      return final;
+      await this.releaser?.clear(); // 清缓存，避免重复生成
+      return await this.hooks.generate.promise(final || finalPayload);
     } catch (err) {
       this.hooks.fail.call(err as Error);
     }

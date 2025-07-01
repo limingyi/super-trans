@@ -8,25 +8,27 @@
   "paths": {
     "/users": {
       "get": {
-        "tags": ["Users"],
-        "summary": "创建新用户",
+        "tags": [
+          "Users"
+        ],
+        "summary": "创建新用户2",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/User2"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "创建成功的用户",
+            "description": "创建成功的用户2",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/User2"
                 }
               }
             }
@@ -37,9 +39,12 @@
   },
   "components": {
     "schemas": {
-      "User": {
+      "User2": {
         "type": "object",
-        "required": ["username", "email"],
+        "required": [
+          "username",
+          "email"
+        ],
         "properties": {
           "id": {
             "type": "integer",
@@ -55,7 +60,7 @@
           },
           "sex": {
             "type": "string",
-            "description": "性别 1-男 2-女"
+            "description": "性别 1-男 2-女 3-啥"
           },
           "email": {
             "type": "string",

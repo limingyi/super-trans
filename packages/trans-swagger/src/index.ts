@@ -5,7 +5,7 @@ import { Processer, ProcessConfig } from "@super-trans/core";
 
 // TODO 这部分可优化
 export default class SwaggerProcesser extends Processer {
-  constructor(config?: ProcessConfig) {
+  constructor(config: ProcessConfig) {
     const resolver = new SwaggerResolver();
     const transformer = new SwaggerTransformer();
     const releaser = new SwaggerReleaser();
