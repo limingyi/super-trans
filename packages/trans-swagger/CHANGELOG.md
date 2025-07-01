@@ -1,5 +1,14 @@
 # @super-trans/trans-swagger
 
+## 2.0.1
+
+### Patch Changes
+
+- 修改优化 cli 执行属性，并添加耗时统计
+- Updated dependencies
+  - @super-trans/core@2.0.1
+  - @super-trans/share@2.0.1
+
 ## 2.0.0
 
 ### Major Changes

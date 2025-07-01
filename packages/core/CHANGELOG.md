@@ -1,5 +1,11 @@
 # @super-trans/core
 
+## 2.0.1
+
+### Patch Changes
+
+- 修改优化 cli 执行属性，并添加耗时统计
+
 ## 2.0.0
 
 ### Major Changes
