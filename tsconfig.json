@@ -2,19 +2,36 @@
   "compilerOptions": {
     "target": "es5",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "lib": ["es5", "ES6", "ESNext", "dom"],
+    "lib": [
+      "es5",
+      "ES6",
+      "ESNext",
+      "dom"
+    ],
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@super-trans/*": ["packages/*"]
+      "@super-trans/*": [
+        "packages/*"
+      ]
     }
   },
-  "include": ["packages/*/src"],
-  "exclude": ["node_modules", "**/dist"]
+  "ts-node": {
+    "files": true, // 启用文件监控
+    "transpileOnly": true // 跳过类型检查（加速）
+  },
+  "include": [
+    "packages/*/src",
+    "jest.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/dist"
+  ]
 }

@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm",
     "dev": "tsup src/index.ts --watch --format cjs,esm --outDir dist",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "test": "npx jest"
   },
   "dependencies": {
     "@super-trans/core": "workspace:*"
